@@ -83,9 +83,8 @@ df_sql = cricket_index[['Player','Dependence_index','Impact_score','Balls_per_in
 df_sql.replace([float('inf'), -float('inf')], 0, inplace=True)
 df_sql.fillna(0, inplace=True)
 
-# -------------------------------
-# 1️⃣ Dtype dictionary for SQL Server
-# -------------------------------
+#  Dtype dictionary for SQL Server
+
 dtype_dict = {
     'Player': NVARCHAR(100),
     'Dependence_index': Float,
@@ -95,17 +94,16 @@ dtype_dict = {
     'Duck': Float
 }
 
-# -------------------------------
-# 2️⃣ Create connection using Windows Authentication
-# -------------------------------
+
+# Create connection using Windows Authentication
+
 engine = create_engine("mssql+pyodbc://DESKTOP-IIUOEIH/YourDatabaseName?driver=ODBC+Driver+17+for+SQL+Server&trusted_connection=yes")
 
-# -------------------------------
-# 3️⃣ Export DataFrame safely
-# -------------------------------
+#  Export DataFrame safely
+
 df_sql.to_sql('player_analysis', engine, if_exists='replace', index=False, dtype=dtype_dict)
 
-print("✅ cricket_index exported to SQL Server successfully!")
+print(" cricket_index exported to SQL Server successfully!")
 
 # %%
 from sqlalchemy import create_engine
@@ -116,17 +114,18 @@ engine = create_engine(f'mssql+pyodbc://{server}/{database}?driver=ODBC+Driver+1
 
 
 # %%
-# Assume df hai tumhara Python dataframe
+# Assuming df as python dataframe
+
 df_sql = df[['Player','Dependence_index','Impact_score','Balls_per_innings','Boundary%','Duck']].copy()
 
-# Inf ya NaN ko handle karo
+# handling values
 df_sql.replace([float('inf'), -float('inf')], 0, inplace=True)
 df_sql.fillna(0, inplace=True)
 
 # %%
 from sqlalchemy.types import NVARCHAR, Float
 
-# Data type define karo
+# Data type define 
 dtype_dict = {
     'Player': NVARCHAR(100),
     'Dependence_index': Float(),
@@ -138,7 +137,7 @@ dtype_dict = {
 
 # Export
 df_sql.to_sql('player_stats', engine, if_exists='replace', index=False, dtype=dtype_dict)
-print("✅ Data transferred to SQL Server!")
+print(" Data transferred to SQL Server")
 
 # %%
 from sqlalchemy.types import NVARCHAR, Float
@@ -153,7 +152,7 @@ dtype_dict = {
 }
 
 df_sql.to_sql('player_stats', engine, if_exists='replace', index=False, dtype=dtype_dict)
-print("✅ Data transferred safely!")
+print(" Data transferred safely!")
 
 # %%
 # Final dataset with all engineered features
@@ -165,6 +164,7 @@ final_columns = [
 
 df_final = df[final_columns]
 df_final.to_csv('cricket_final_ready.csv', index=False)
-print("✅ Final dataset exported successfully!")
+print(" Final dataset exported successfully!")
 
 # %%
+
